@@ -1,1 +1,2 @@
 python-vlc
+apt-get install vlc

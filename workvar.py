@@ -1,5 +1,8 @@
 import datetime as dt
 import calendar as cl
+import os
+import vlc
+import time
 def set_day():
     days=[]
     counter=0
@@ -65,12 +68,49 @@ def set_clock_time(day,hour,minute):
             Year+=1
     date=dt.datetime(Year,Month,Day,hour,minute,0,0)
     return date
-    
+
+def set_music():
+    music=[]
+    counter=1
+    try:
+        music=os.listdir('./Music')
+    except OSError:
+        print("There is no \"Music\" here! Make it!")
+        exit()
+    print("Variants:")
+    for i in music:
+        print(str(counter)+' - '+i)
+        counter+=1
+    while(True):
+        the_choice = int(input("Choose the variant you want: "))
+        if the_choice > len(music) or the_choice <= 0:
+            print("You can choose only from 1 to "+str(len(music))+". Try again")
+            continue
+        else:
+            return music[the_choice-1]
+
+def set_clock(music,timer):
+    zvon=vlc.MediaPlayer('./Music/'+music)
+    time.sleep(timer)
+    try:
+        time.sleep(timer)
+        try:
+            zvon.play()
+        except KeyboardInterrupt:
+            zvon.stop()
+        print("Are you woked up? ;P")
+        exit()
+    except KeyboardInterrupt:
+        print('Why are we stopping here?')
+        exit(0)
+
 def main():
     day = set_day()
     hour , minute = set_time(day)
-    smth = set_clock_time(day,hour,minute)-dt.datetime.today()
-    print(smth.total_seconds())
+    mus=set_music()
+    smth = (set_clock_time(day,hour,minute)-dt.datetime.today()).total_seconds()
+    set_clock(mus,smth)
+    #print(smth.total_seconds())
 
 if __name__ == '__main__':
     main()
