@@ -94,10 +94,11 @@ def set_clock(music,timer):
     time.sleep(timer)
     try:
         time.sleep(timer)
-        try:
-            zvon.play()
-        except KeyboardInterrupt:
-            zvon.stop()
+        os.system('mpg123 ./Music/'+music)
+#        try:
+#            zvon.play()
+#        except KeyboardInterrupt:
+#            zvon.stop()
         print("Are you woked up? ;P")
         exit()
     except KeyboardInterrupt:
@@ -109,6 +110,7 @@ def main():
     hour , minute = set_time(day)
     mus=set_music()
     smth = (set_clock_time(day,hour,minute)-dt.datetime.today()).total_seconds()
+    print(os.getpid())
     set_clock(mus,smth)
     #print(smth.total_seconds())
 
