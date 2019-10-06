@@ -98,14 +98,9 @@ def set_music():
             return music[the_choice-1]
 
 def set_clock(music,timer):
-#zvon=vlc.MediaPlayer('./Music/'+music)
     try:
         time.sleep(timer)
         os.system('mpg123 ./Music/'+music)
-#        try:
-#            zvon.play()
-#        except KeyboardInterrupt:
-#            zvon.stop()
         print("Are you woked up? ;P")
         exit()
     except KeyboardInterrupt:
@@ -118,7 +113,6 @@ def main():
     hour , minute = set_time(day)
     mus=set_music()
     smth = (set_clock_time(day,hour,minute)-dt.datetime.today()).total_seconds()
-    print(os.getpid())
     set_clock(mus,smth)
 
 if __name__ == '__main__':
