@@ -1,8 +1,20 @@
 import datetime as dt
 import calendar as cl
+import subprocess as sb
 import os
-import vlc
 import time
+def check_for_player():
+    try:
+        sb.Popen(["mpg123","-?"],stdout=sb.PIPE,stderr=sb.PIPE)
+    except:
+        print("You must install an additional program for the correct operation of this (sound playback). After 10 seconds, the installation will start.")
+        time.sleep(5)
+        for i in range(10):
+            print(i)
+            time.sleep(1)
+        os.system("apt-get install mpg123")
+        print("Starting the AlarmClock")
+
 def set_day():
     days=[]
     counter=0
@@ -17,10 +29,7 @@ def set_day():
             continue
         else:
             day-=1
-            break
-    #print(days[day])
-    day+=1
-    return day
+        return day+1
 
 def set_time(day):
     while(True):
@@ -47,8 +56,7 @@ def set_time(day):
             else:
                 print("\nMinutes can be from 0 to 59. Try again\n\n\n")
                 continue
-        break
-    return hour , minute
+        return hour , minute
 
 def set_clock_time(day,hour,minute):
     a=0
@@ -90,8 +98,7 @@ def set_music():
             return music[the_choice-1]
 
 def set_clock(music,timer):
-    zvon=vlc.MediaPlayer('./Music/'+music)
-    time.sleep(timer)
+#zvon=vlc.MediaPlayer('./Music/'+music)
     try:
         time.sleep(timer)
         os.system('mpg123 ./Music/'+music)
@@ -106,13 +113,13 @@ def set_clock(music,timer):
         exit(0)
 
 def main():
+    check_for_player()
     day = set_day()
     hour , minute = set_time(day)
     mus=set_music()
     smth = (set_clock_time(day,hour,minute)-dt.datetime.today()).total_seconds()
     print(os.getpid())
     set_clock(mus,smth)
-    #print(smth.total_seconds())
 
 if __name__ == '__main__':
     main()
